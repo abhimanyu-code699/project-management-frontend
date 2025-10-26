@@ -9,6 +9,9 @@ import TotalManagers from './pages/TotalManagers';
 import TotalDevelopers from './pages/TotalDevelopers';
 import TotalProjects from './pages/TotalProjects';
 import DeveloperProjects from './pages/DeveloperProjects';
+import CompletedTasks from './pages/CompletedTasks';
+import NewTasks from './pages/NewTasks';
+import ActiveTasks from './pages/ActiveTasks';
 
 function App() {
 
@@ -64,14 +67,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route 
-          path='/admin/developers/${id}'
-          element={
-            <ProtectedRoute allowedRoles={['admin']}>
-              <DeveloperProjects />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/developer/:id/completed-tasks' element={<CompletedTasks />} />
+        <Route path='/developer/:id/new-tasks' element={<NewTasks />} />
+        <Route path='/developer/:id/active-tasks' element={<ActiveTasks />} />
+
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
       </Routes>
     </Router>

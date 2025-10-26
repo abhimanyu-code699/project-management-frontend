@@ -33,6 +33,7 @@ const Login = () => {
         sessionStorage.setItem('token', data.token)
         sessionStorage.setItem('role', data.user.role)
         sessionStorage.setItem('name',data.user.name);
+        sessionStorage.setItem('id',data.user.id);
       }
 
       toast.success(data.message || 'Login successful!', {
