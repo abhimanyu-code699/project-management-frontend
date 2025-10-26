@@ -3,6 +3,9 @@ import { FaRegUserCircle } from 'react-icons/fa'
 import DeveloperDashboard from '../components/DeveloperDashboard' 
 
 const Developer = () => {
+
+    const name = sessionStorage.getItem('name');
+
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Top Navbar */}
@@ -12,7 +15,7 @@ const Developer = () => {
           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
             <FaRegUserCircle className="text-gray-600 text-2xl" />
           </div>
-          <span className="font-medium text-gray-700">Developer</span>
+          <span className="font-medium text-gray-700">{name}</span>
         </div>
       </div>
 

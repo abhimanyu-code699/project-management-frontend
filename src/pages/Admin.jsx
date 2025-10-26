@@ -17,7 +17,7 @@ const Admin = () => {
           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
             <FaRegUserCircle className="text-gray-600 text-2xl" />
           </div>
-          <span className="font-medium text-gray-700">${name}</span>
+          <span className="font-medium text-gray-700">{name}</span>
         </div>
       </div>
 
@@ -28,7 +28,7 @@ const Admin = () => {
           onClick={() => setShowRegister(true)}
           className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors mb-6"
         >
-          Create New Project
+          Create New User
         </button>
 
         {/* Render AdminDashboard */}

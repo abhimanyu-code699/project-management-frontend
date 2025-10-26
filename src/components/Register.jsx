@@ -23,13 +23,26 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(`${backend_url}/auth/register`, {
-        name,
-        email,
-        password,
-        role,
-        phone
-      })
+        const token = sessionStorage.getItem('token');
+        if(!token){
+            toast.error('Unauthorized! Please log in again.')
+            setLoading(false)
+            return
+        }
+      const response = await axios.post(`${backend_url}/auth/register`, 
+        {
+            name,
+            email,
+            password,
+            role,
+            phone
+        },
+        {
+            headers:{
+                Authorization:`${token}`
+            },
+        }
+    )
 
       toast.success(response.data.message || 'User registered successfully!')
       // Clear form
@@ -108,7 +121,7 @@ const Register = () => {
               type="phone"
               id="phone"
               value={phone}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Enter phone number"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />

@@ -5,6 +5,9 @@ import Admin from './pages/Admin';
 import Manager from './pages/Manager';
 import Developer from './pages/Developer';
 import ProtectedRoute from './components/ProtectedRoute';
+import TotalManagers from './pages/TotalManagers';
+import TotalDevelopers from './pages/TotalDevelopers';
+import TotalProjects from './pages/TotalProjects';
 
 function App() {
 
@@ -33,6 +36,30 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['developer']}>
               <Developer />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path='/admin/developers'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TotalDevelopers />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path='/admin/managers'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TotalManagers />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path='/admin/projects'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TotalProjects />
             </ProtectedRoute>
           }
         />
