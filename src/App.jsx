@@ -28,7 +28,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/developer' element={<Developer />} />
+        <Route
+          path="/developer"
+          element={
+            <ProtectedRoute allowedRoles={['developer']}>
+              <Developer />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
       </Routes>
     </Router>

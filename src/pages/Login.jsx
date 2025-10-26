@@ -32,13 +32,14 @@ const Login = () => {
       if (data.token) {
         sessionStorage.setItem('token', data.token)
         sessionStorage.setItem('role', data.user.role)
+        sessionStorage.setItem('name',data.user.name);
       }
 
       toast.success(data.message || 'Login successful!', {
         autoClose: 2000,
         onClose: () => {
           if (data.user.role === 'admin') navigate('/admin')
-          else if (data.user.role === 'developer') navigate('/dashboard')
+          else if (data.user.role === 'developer') navigate('/developer')
           else if(data.user.role === 'manager') navigate('/manager')
           else navigate('/')
         },

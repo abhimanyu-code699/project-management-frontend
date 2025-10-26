@@ -6,6 +6,8 @@ import { FaRegUserCircle } from "react-icons/fa";
 const Admin = () => {
   const [showRegister, setShowRegister] = useState(false);
 
+  const name = sessionStorage.getItem('name');
+
   return (
     <div className="min-h-screen bg-gray-100 relative">
       {/* Top Navbar */}
@@ -15,7 +17,7 @@ const Admin = () => {
           <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
             <FaRegUserCircle className="text-gray-600 text-2xl" />
           </div>
-          <span className="font-medium text-gray-700">Admin</span>
+          <span className="font-medium text-gray-700">${name}</span>
         </div>
       </div>
 
