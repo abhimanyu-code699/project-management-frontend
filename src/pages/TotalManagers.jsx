@@ -1,86 +1,92 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { backend_url } from '../../utils/urlConfing'
-import { FaUserCircle, FaEdit, FaTrash } from 'react-icons/fa'
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { backend_url } from "../../utils/urlConfing";
+import { FaUserCircle, FaEdit, FaTrash } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const TotalManagers = () => {
-  const [managers, setManagers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [editManager, setEditManager] = useState(null) 
-  const [updating, setUpdating] = useState(false)
+  const [managers, setManagers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [editManager, setEditManager] = useState(null);
+  const [updating, setUpdating] = useState(false);
 
+  const userName = sessionStorage.getItem("name");
   useEffect(() => {
     const fetchManagers = async () => {
       try {
-        const token = sessionStorage.getItem('token')
+        const token = sessionStorage.getItem("token");
         const res = await axios.get(`${backend_url}/api/getManager-data`, {
           headers: { Authorization: `${token}` },
-        })
-        setManagers(res.data.data || [])
+        });
+        setManagers(res.data.data || []);
       } catch (error) {
-        console.error('Error fetching managers:', error)
-        toast.error('Failed to load manager list')
+        console.error("Error fetching managers:", error);
+        toast.error("Failed to load manager list");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
-    fetchManagers()
-  }, [])
+    };
+    fetchManagers();
+  }, []);
 
   const handleDelete = async (id) => {
-  if (!window.confirm('Are you sure you want to delete this manager?')) return;
+    if (!window.confirm("Are you sure you want to delete this manager?"))
+      return;
 
-  try {
-    const token = sessionStorage.getItem('token');
-    const res = await axios.delete(`${backend_url}/api/delete-manager/${id}`, {
-      headers: { Authorization: `${token}` },
-    });
+    try {
+      const token = sessionStorage.getItem("token");
+      const res = await axios.delete(
+        `${backend_url}/api/delete-manager/${id}`,
+        {
+          headers: { Authorization: `${token}` },
+        }
+      );
 
-    toast.success(res.data.message || 'Manager deleted successfully!');
-    setManagers(managers.filter((m) => m.id !== id));
-  } catch (error) {
-    console.log(error);
+      toast.success(res.data.message || "Manager deleted successfully!");
+      setManagers(managers.filter((m) => m.id !== id));
+    } catch (error) {
+      console.log(error);
 
-    const errorMessage =
-      error.response?.data?.message || 'Something went wrong while deleting manager';
-    toast.error(errorMessage);
-  }
-};
+      const errorMessage =
+        error.response?.data?.message ||
+        "Something went wrong while deleting manager";
+      toast.error(errorMessage);
+    }
+  };
 
   const handleEdit = (manager) => {
-    setEditManager(manager)
-  }
+    setEditManager(manager);
+  };
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setEditManager({ ...editManager, [name]: value })
-  }
+    const { name, value } = e.target;
+    setEditManager({ ...editManager, [name]: value });
+  };
 
   const handleUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      setUpdating(true)
-      const token = sessionStorage.getItem('token')
-      const { id, name, email, phone, password } = editManager
+      setUpdating(true);
+      const token = sessionStorage.getItem("token");
+      const { id, name, email, phone, password } = editManager;
       await axios.put(
         `${backend_url}/api/edit-manager/${id}`,
         { name, email, phone, password },
         { headers: { Authorization: `${token}` } }
-      )
-      toast.success('Manager updated successfully!')
+      );
+      toast.success("Manager updated successfully!");
       setManagers(
         managers.map((m) => (m.id === id ? { ...m, name, email, phone } : m))
-      )
-      setEditManager(null) 
+      );
+      setEditManager(null);
     } catch (error) {
       console.log(error);
-      toast.error('Failed to update manager')
+      toast.error("Failed to update manager");
     } finally {
-      setUpdating(false)
+      setUpdating(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-10">
@@ -90,7 +96,11 @@ const TotalManagers = () => {
         <h1 className="text-3xl font-bold text-blue-600 mb-4 sm:mb-0">
           Project Management
         </h1>
-        <FaUserCircle className="text-4xl text-gray-600 cursor-pointer hover:text-blue-600 transition" />
+
+        <div className="flex items-center space-x-3">
+          <FaUserCircle className="text-4xl text-gray-600 cursor-pointer hover:text-blue-600 transition" />
+          <p className="text-gray-700 font-medium">{userName}</p>
+        </div>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
@@ -191,7 +201,7 @@ const TotalManagers = () => {
                 <input
                   type="password"
                   name="password"
-                  value={editManager.password || ''}
+                  value={editManager.password || ""}
                   onChange={handleChange}
                   className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   placeholder="Leave blank to keep unchanged"
@@ -210,10 +220,12 @@ const TotalManagers = () => {
                   type="submit"
                   disabled={updating}
                   className={`px-4 py-2 rounded-lg text-white ${
-                    updating ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    updating
+                      ? "bg-blue-400 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
                   } transition`}
                 >
-                  {updating ? 'Updating...' : 'Update'}
+                  {updating ? "Updating..." : "Update"}
                 </button>
               </div>
             </form>
@@ -221,7 +233,7 @@ const TotalManagers = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TotalManagers
+export default TotalManagers;

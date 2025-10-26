@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import TotalManagers from './pages/TotalManagers';
 import TotalDevelopers from './pages/TotalDevelopers';
 import TotalProjects from './pages/TotalProjects';
+import DeveloperProjects from './pages/DeveloperProjects';
 
 function App() {
 
@@ -60,6 +61,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <TotalProjects />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path='/admin/developers/${id}'
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <DeveloperProjects />
             </ProtectedRoute>
           }
         />
