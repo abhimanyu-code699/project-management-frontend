@@ -29,7 +29,7 @@ Make sure you have installed:
 
 
 ### 📦 Clone the Repository  
-git clone https://github.com/abhimanyu-code699/project-management-frontend.git
+git clone git@github.com:abhimanyu-code699/project-management-frontend.git
 
 ---
 
