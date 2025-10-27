@@ -6,7 +6,7 @@ import { User } from "lucide-react";
 import { FaRegUserCircle } from 'react-icons/fa'
 
 const ActiveTasks = () => {
-  const { id } = useParams(); // developer ID
+  const { id } = useParams(); 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({ name: "Developer" });
@@ -65,7 +65,6 @@ const ActiveTasks = () => {
     }
   };
 
-  // Add comment
   const handleAddComment = async (taskId) => {
     const comment = prompt("Enter your comment:");
     if (!comment) return;

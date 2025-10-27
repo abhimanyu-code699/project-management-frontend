@@ -12,6 +12,7 @@ import DeveloperProjects from './pages/DeveloperProjects';
 import CompletedTasks from './pages/CompletedTasks';
 import NewTasks from './pages/NewTasks';
 import ActiveTasks from './pages/ActiveTasks';
+import ViewTasks from './pages/ViewTasks';
 
 function App() {
 
@@ -70,6 +71,8 @@ function App() {
         <Route path='/developer/:id/completed-tasks' element={<CompletedTasks />} />
         <Route path='/developer/:id/new-tasks' element={<NewTasks />} />
         <Route path='/developer/:id/active-tasks' element={<ActiveTasks />} />
+
+        <Route path='/manager/:managerId/viewtasks' element={<ViewTasks />} />
 
         <Route path="/unauthorized" element={<h1>Unauthorized Access</h1>} />
       </Routes>

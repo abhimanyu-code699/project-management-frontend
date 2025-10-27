@@ -10,9 +10,11 @@ const TotalDevelopers = () => {
   const [loading, setLoading] = useState(true);
   const [editDeveloper, setEditDeveloper] = useState(null);
   const [updating, setUpdating] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   const userName = sessionStorage.getItem('name');
 
+  // ✅ Fetch all developers
   useEffect(() => {
     const fetchDevelopers = async () => {
       try {
@@ -31,23 +33,28 @@ const TotalDevelopers = () => {
     fetchDevelopers();
   }, []);
 
-  const handleDelete = async (id) => {
+  // ✅ Delete Developer by ID
+  const handleDelete = async (developerId) => {
     if (!window.confirm('Are you sure you want to delete this developer?')) return;
 
     try {
+      setDeletingId(developerId);
       const token = sessionStorage.getItem('token');
-      const res = await axios.delete(`${backend_url}/api/delete-developer/${id}`, {
+      const res = await axios.delete(`${backend_url}/api/delete-developer/${developerId}`, {
         headers: { Authorization: `${token}` },
       });
+
       toast.success(res.data.message || 'Developer deleted successfully!');
-      setDevelopers(developers.filter((d) => d.id !== id));
+      setDevelopers(developers.filter((d) => d.id !== developerId));
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || 'Failed to delete developer');
+    } finally {
+      setDeletingId(null);
     }
   };
 
-  // Open edit card
+  // ✅ Edit Developer
   const handleEdit = (developer) => setEditDeveloper(developer);
 
   const handleChange = (e) => {
@@ -55,7 +62,7 @@ const TotalDevelopers = () => {
     setEditDeveloper({ ...editDeveloper, [name]: value });
   };
 
-  // Update developer
+  // ✅ Update Developer
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
@@ -71,9 +78,7 @@ const TotalDevelopers = () => {
 
       toast.success(res.data.message || 'Developer updated successfully!');
       setDevelopers(
-        developers.map((d) =>
-          d.id === id ? { ...d, name, email, phone } : d
-        )
+        developers.map((d) => (d.id === id ? { ...d, name, email, phone } : d))
       );
       setEditDeveloper(null);
     } catch (error) {
@@ -87,8 +92,6 @@ const TotalDevelopers = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6 lg:p-10">
       <ToastContainer position="top-right" autoClose={2500} />
-
-      {/* Top bar */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-blue-600 mb-4 sm:mb-0">
           Project Management
@@ -112,6 +115,7 @@ const TotalDevelopers = () => {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-blue-100 text-gray-700 uppercase text-sm leading-normal">
+                  <th className="py-2 px-4 text-left">ID</th>
                   <th className="py-2 px-4 text-left">Name</th>
                   <th className="py-2 px-4 text-left">Email</th>
                   <th className="py-2 px-4 text-left">Phone</th>
@@ -125,6 +129,7 @@ const TotalDevelopers = () => {
                     key={dev.id}
                     className="border-b border-gray-200 hover:bg-gray-50 transition"
                   >
+                    <td className="py-2 px-4">{dev.id}</td>
                     <td className="py-2 px-4">{dev.name}</td>
                     <td className="py-2 px-4">{dev.email}</td>
                     <td className="py-2 px-4">{dev.phone}</td>
@@ -138,9 +143,18 @@ const TotalDevelopers = () => {
                       </button>
                       <button
                         onClick={() => handleDelete(dev.id)}
-                        className="text-red-600 hover:text-red-800 transition"
+                        disabled={deletingId === dev.id}
+                        className={`${
+                          deletingId === dev.id
+                            ? 'text-gray-400 cursor-not-allowed'
+                            : 'text-red-600 hover:text-red-800'
+                        } transition`}
                       >
-                        <FaTrash size={18} />
+                        {deletingId === dev.id ? (
+                          <span className="text-sm">Deleting...</span>
+                        ) : (
+                          <FaTrash size={18} />
+                        )}
                       </button>
                     </td>
                   </tr>
@@ -150,11 +164,21 @@ const TotalDevelopers = () => {
           )}
         </div>
 
-        {/* Edit Card */}
+        {/* Edit Developer Form */}
         {editDeveloper && (
           <div className="w-full lg:w-1/3 bg-white rounded-2xl shadow-2xl p-6 flex flex-col gap-4">
             <h2 className="text-2xl font-semibold text-gray-800 mb-2">Edit Developer</h2>
             <form onSubmit={handleUpdate} className="flex flex-col gap-4">
+              <div>
+                <label className="block text-gray-700 mb-1">Developer ID</label>
+                <input
+                  type="text"
+                  name="id"
+                  value={editDeveloper.id}
+                  readOnly
+                  className="w-full px-3 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+                />
+              </div>
               <div>
                 <label className="block text-gray-700 mb-1">Name</label>
                 <input
@@ -212,7 +236,9 @@ const TotalDevelopers = () => {
                   type="submit"
                   disabled={updating}
                   className={`px-4 py-2 rounded-lg text-white ${
-                    updating ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                    updating
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700'
                   } transition`}
                 >
                   {updating ? 'Updating...' : 'Update'}
